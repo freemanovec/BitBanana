@@ -37,6 +37,7 @@ public class PrefsUtil {
     public static final String SECOND_CURRENCY = "secondCurrency";
     public static final String LAST_CLIPBOARD_SCAN = "lastClipboardScan";
     public static final String SCAN_CLIPBOARD = "scanClipboard";
+    public static final String EXTERNAL_WALLET = "externalWallet";
     public static final String SHOW_IDENTITY_TAP_HINT = "identityTapHint";
     public static final String NODE_ALIAS_CACHE = "nodeAliasCache";
     public static final String FEE_PRESET_FAST = "feePresetFast";

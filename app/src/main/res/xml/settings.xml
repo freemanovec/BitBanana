@@ -50,6 +50,11 @@
             android:key="goToPayerDataSettings"
             android:title="@string/settings_payer_data"
             app:iconSpaceReserved="false" />
+        <EditTextPreference
+            android:key="externalWallet"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/settings_external_wallet" />
 
     </PreferenceCategory>
 

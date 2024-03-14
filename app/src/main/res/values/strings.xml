@@ -261,6 +261,7 @@
     <string name="settings_tor_summary">Anonymize all web traffic using the Tor network. This only affects things like fetching exchange rates or interacting with LNURL services. Whether or not Tor is used to connect to a node can be set for each node individually in its connection settings.</string>
     <string name="settings_scan_clipboard">Check clipboard</string>
     <string name="settings_scan_clipboard_summary">Automatically check clipboard for data BitBanana can handle.</string>
+    <string name="settings_external_wallet">External tracked wallet address</string>
     <string name="settings_hapticPin">Haptic PIN Feedback</string>
     <string name="settings_systemLanguage">System Language</string>
     <string name="settings_payer_data">Payment identification</string>
@@ -717,6 +718,7 @@
     <string name="balance_details_on_chain_unconfirmed">On-Chain pending:</string>
     <string name="balance_details_lightning">Open channels:</string>
     <string name="balance_details_lightning_pending">Pending channels:</string>
+    <string name="balance_details_external">External wallet:</string>
 
     <string name="register">Register</string>
     <string name="login_verb">Log in</string>

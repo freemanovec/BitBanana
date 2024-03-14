@@ -11,20 +11,23 @@ public class Balances {
     private final long mChannelBalance;
     private final long mChannelBalancePendingOpen;
     private final long mChannelBalanceLimbo;
+    private final long mExternalWallet;
 
     public Balances(long onChainTotal, long onChainConfirmed,
                     long onChainUnconfirmed, long channelBalance,
-                    long channelBalancePendingOpen, long channelBalanceLimbo) {
+                    long channelBalancePendingOpen, long channelBalanceLimbo,
+                    long externalWallet) {
         mOnChainBalanceTotal = onChainTotal;
         mOnChainBalanceConfirmed = onChainConfirmed;
         mOnChainBalanceUnconfirmed = onChainUnconfirmed;
         mChannelBalance = channelBalance;
         mChannelBalancePendingOpen = channelBalancePendingOpen;
         mChannelBalanceLimbo = channelBalanceLimbo;
+        mExternalWallet = externalWallet;
     }
 
     public long total() {
-        return mOnChainBalanceTotal + mChannelBalance + mChannelBalancePendingOpen + mChannelBalanceLimbo;
+        return mOnChainBalanceTotal + mChannelBalance + mChannelBalancePendingOpen + mChannelBalanceLimbo + mExternalWallet;
     }
 
     public long onChainTotal() {
@@ -52,6 +55,10 @@ public class Balances {
         return mChannelBalanceLimbo;
     }
 
+    public long externalWallet() {
+        return mExternalWallet;
+    }
+
 
     public void debugPrint() {
         // In LND a cooperative close is in both, "On Chain Unconfirmed" & "Channels Pending Close", which will cause a to high total balance until the next block is mined
@@ -64,6 +71,7 @@ public class Balances {
         BBLog.d(LOG_TAG, "Open Channels: " + MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromSats(channelBalance()));
         BBLog.d(LOG_TAG, "Channels Pending Open: " + MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromSats(channelBalancePending()));
         BBLog.d(LOG_TAG, "Channels Pending Close: " + MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromSats(channelBalanceLimbo()));
+        BBLog.d(LOG_TAG, "External wallet: " + MonetaryUtil.getInstance().getPrimaryDisplayAmountStringFromSats(externalWallet()));
         BBLog.d(LOG_TAG, "----------------------------");
     }
 }

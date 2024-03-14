@@ -63,6 +63,7 @@ import app.michaelwuensch.bitbanana.backends.lnd.lndConnection.LndConnection;
 import app.michaelwuensch.bitbanana.baseClasses.App;
 import app.michaelwuensch.bitbanana.connection.tor.TorManager;
 import app.michaelwuensch.bitbanana.models.LightningNodeUri;
+import app.michaelwuensch.bitbanana.util.BlockExplorer;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
@@ -112,6 +113,7 @@ public class Wallet {
     private long mChannelBalance = 0;
     private long mChannelBalancePendingOpen = 0;
     private long mChannelBalanceLimbo = 0;
+    private long mExternalWallet = 0;
     private String mIdentityPubKey;
     private LightningNodeUri[] mNodeUris;
     private int mSyncedBlockHeight;
@@ -155,6 +157,7 @@ public class Wallet {
         mChannelBalance = 0;
         mChannelBalancePendingOpen = 0;
         mChannelBalanceLimbo = 0;
+        mExternalWallet = 0;
 
         mSyncedBlockHeight = 0;
         mConnectedToLND = false;
@@ -381,7 +384,7 @@ public class Wallet {
      */
     public Balances getBalances() {
         return new Balances(mOnChainBalanceTotal, mOnChainBalanceConfirmed,
-                mOnChainBalanceUnconfirmed, mChannelBalance, mChannelBalancePendingOpen, mChannelBalanceLimbo);
+                mOnChainBalanceUnconfirmed, mChannelBalance, mChannelBalancePendingOpen, mChannelBalanceLimbo, mExternalWallet);
     }
 
     /**
@@ -393,7 +396,7 @@ public class Wallet {
      */
     public Balances getDemoBalances() {
         return new Balances(0, 0,
-                0, 0, 0, 0);
+                0, 0, 0, 0, 0);
     }
 
     public void fetchBalancesWithDebounce() {
@@ -412,11 +415,13 @@ public class Wallet {
         Single<ChannelBalanceResponse> channelBalance = LndConnection.getInstance().getLightningService().channelBalance(ChannelBalanceRequest.newBuilder().build());
         Single<PendingChannelsResponse> pendingChannels = LndConnection.getInstance().getLightningService().pendingChannels(PendingChannelsRequest.newBuilder().build());
 
+
         compositeDisposable.add(Single.zip(walletBalance, channelBalance, pendingChannels, (walletBalanceResponse, channelBalanceResponse, pendingChannelsResponse) -> {
 
             setOnChainBalance(walletBalanceResponse.getTotalBalance(), walletBalanceResponse.getConfirmedBalance(), walletBalanceResponse.getUnconfirmedBalance());
             setChannelBalance(channelBalanceResponse.getLocalBalance().getSat(), channelBalanceResponse.getPendingOpenLocalBalance().getSat());
             setChannelBalanceLimbo(pendingChannelsResponse.getTotalLimboBalance());
+            setExternalWallet(new BlockExplorer().getAddressBalance(PrefsUtil.getPrefs().getString(PrefsUtil.EXTERNAL_WALLET, "none")));
 
             return true;
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(aBoolean -> {
@@ -1433,6 +1438,10 @@ public class Wallet {
 
     private void setChannelBalanceLimbo(long balanceLimbo) {
         mChannelBalanceLimbo = balanceLimbo;
+    }
+
+    private void setExternalWallet(long externalWallet) {
+        mExternalWallet = externalWallet;
     }
 
     /**

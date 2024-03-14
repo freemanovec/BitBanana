@@ -162,6 +162,29 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/balance_details_external"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <app.michaelwuensch.bitbanana.customView.AmountView
+                    android:id="@+id/externalWallet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:canBlur="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:subscribeToPrefChange="false"
+                    app:textSize="18sp" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <TextView
@@ -249,7 +272,10 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:subscribeToPrefChange="false"
-                    app:textSize="18sp" />
+                    app:textSize="18sp" >
+
+                </app.michaelwuensch.bitbanana.customView.AmountView>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </FrameLayout>

@@ -6,9 +6,18 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.StrictMode;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import java.io.IOException;
+
 import app.michaelwuensch.bitbanana.R;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * This class allows showing details of On-Chain transactions and addresses using
@@ -141,6 +150,36 @@ public class BlockExplorer {
             new UserGuardian(mContext, this::startBlockExplorer).privacyExternalLink();
         } else {
             startBlockExplorer();
+        }
+    }
+
+    public long getAddressBalance(String address) {
+        if(address.equals("none")) {
+            return 0;
+        }
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        String apiUrl = "https://mempool.stotak.cz/api/address/" + address;
+
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(apiUrl)
+                .build();
+
+        try {
+            Response response = client.newCall(request).execute();
+            String jsonData = response.body().string();
+            JsonParser jsonParser = new JsonParser();
+            JsonObject jsonObject = (JsonObject)jsonParser.parse(jsonData);
+            JsonObject chainStats = jsonObject.get("chain_stats").getAsJsonObject();
+            long fundedSum = chainStats.get("funded_txo_sum").getAsLong();
+            long spentSum = chainStats.get("spent_txo_sum").getAsLong();
+            return fundedSum - spentSum;
+        } catch (IOException e) {
+            return 0;
         }
     }
 

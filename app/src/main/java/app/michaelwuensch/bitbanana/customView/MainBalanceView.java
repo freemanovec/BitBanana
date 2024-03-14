@@ -45,6 +45,7 @@ public class MainBalanceView extends MotionLayout {
     private AmountView mAvOnChainPending;
     private AmountView mAvLighting;
     private AmountView mAvLightningPending;
+    private AmountView mAvExternalWallet;
     private View mBalanceDetails;
     private View mHandle;
 
@@ -86,6 +87,7 @@ public class MainBalanceView extends MotionLayout {
         mAvOnChainPending = view.findViewById(R.id.onChainPending);
         mAvLighting = view.findViewById(R.id.lightningConfirmed);
         mAvLightningPending = view.findViewById(R.id.lightningPending);
+        mAvExternalWallet = view.findViewById(R.id.externalWallet);
         mBalanceDetails = view.findViewById(R.id.balanceDetails);
         mHandle = view.findViewById(R.id.handle);
 
@@ -251,6 +253,7 @@ public class MainBalanceView extends MotionLayout {
                 mAvOnChainPending.setAmountSat(balances.onChainUnconfirmed());
                 mAvLighting.setAmountSat(balances.channelBalance());
                 mAvLightningPending.setAmountSat(balances.channelBalancePending());
+                mAvExternalWallet.setAmountSat(balances.externalWallet());
 
                 BBLog.v(LOG_TAG, "Total balance display updated");
             }

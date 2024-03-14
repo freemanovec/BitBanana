@@ -50,6 +50,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private Preference mPinPref;
     private ListPreference mListLanguage;
 
+
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         // Load the settings from an XML resource
